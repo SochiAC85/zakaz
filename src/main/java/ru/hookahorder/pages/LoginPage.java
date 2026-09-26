@@ -1,13 +1,12 @@
-package pages;
+package ru.hookahorder.pages;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import io.qameta.allure.Step;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.logging.Logger;
-
+@Slf4j
 public class LoginPage {
-    private static final Logger log = Logger.getLogger(LoginPage.class.getName());
-
     private final Page page;
 
     private static final String PHONE_SELECTOR = "#login-uid";
@@ -18,8 +17,9 @@ public class LoginPage {
         this.page = page;
     }
 
-    public void login(String phone, String password) {
-        log.info("Ввод логина: " + phone);
+    @Step("Авторизация в системе под номером: '{phone}'")
+    public LoginPage login(String phone, String password) {
+        log.info("Ввод логина: {}", phone);
         page.fill(PHONE_SELECTOR, phone);
 
         log.info("Ввод пароля");
@@ -35,5 +35,7 @@ public class LoginPage {
                         .setState(WaitForSelectorState.VISIBLE)
                         .setTimeout(15000));
         log.info("Вход выполнен, панель управления загружена");
+
+        return this;
     }
 }
